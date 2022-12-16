@@ -1,28 +1,31 @@
 import { Component } from "react";
-import MyArticle from "./components/MyArticle";
 import MyInput from "./components/MyInput";
+import MyErrorBoundry from "./components/MyErrorBoundry";
+import styles from "./index.module.css";
 
+// const style = {backgroundColor: 'white'}
 class App extends Component {
 
   constructor(){
     super();
-    this.state = {
-      articles: ['asd', 'qwe']
-    }
   }
 
-  // handleChange = (value) => this.setState({...this.state})
-  handleChange = (value) => {
-      this.setState({...this.state, articles: [...this.state.articles, value]})
-  }
 
 
   render(){
+    console.log('styles main', styles)
     return (
-      <>
-        <MyInput onChange={this.handleChange} />
-        {this.state.articles.map((a, i) => <MyArticle key={a} title={a} />)}
-      </>
+      <div className={styles.wrapper}>
+      {/* <MyErrorBoundry> */}
+        <MyInput/>
+        {/* {this.state.articles.map((a, i) => <MyArticle key={a} title={a} />)} */}
+        <p>
+          asdasdasd
+          asdasdasdasdd
+          asdasd
+        </p>
+      {/* </MyErrorBoundry> */}
+      </div>
     );
   }
 }
