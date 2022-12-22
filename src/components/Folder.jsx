@@ -20,21 +20,24 @@ class Folder extends Component {
         .filter(i => !!i);
   } 
 
-  handleToggle = () => this.setState({...this.setState, isOpen: !this.state.isOpen})
+  handleToggle = () => {
+    this.setState(state => {
+      return {...this.setState, isOpen: !state.isOpen}
+    })
+  }
 
   render(){
     // console.log('render', this.props.name,this.openNextFolders())
     return (
     <>
-        <li onClick={this.handleToggle}>FOLDER {this.props.name}</li> 
-        {
-            this.state.isOpen? (
-                <ul>
-                    {renderCurrentType(this.props.children, this.openNextFolders())}
-                </ul>
-            ) : null
-        }
-      
+      <li onClick={this.handleToggle}>FOLDER {this.props.name}</li> 
+      {
+          this.state.isOpen? (
+              <ul>
+                {renderCurrentType(this.props.children, this.openNextFolders())}
+              </ul>
+          ) : null
+      }
     </>
     );
   }
