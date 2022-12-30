@@ -4,7 +4,7 @@ import {Component} from "react";
 class MyArticle extends Component {
 
     constructor(props) {
-      console.log("props", props);
+      // console.log("props", props);
       super(props);
     }
 
