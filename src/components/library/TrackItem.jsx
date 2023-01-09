@@ -1,6 +1,6 @@
-const TrackItem = ({name}) => {
+const TrackItem = ({name, isActive}) => {
     return (
-        <li>
+        <li style={isActive ? {background: 'blue'} : null}>
             {name}
         </li>
     )

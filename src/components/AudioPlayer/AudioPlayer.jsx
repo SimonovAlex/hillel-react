@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import useChillHop from "../../API/useChillHop";
 import AudioController from "./AudioController";
+import { AudioListContext } from "../../context/AudioListContext";
 
-const AudioPlayer = ({ currentTrack }) => {
+const AudioPlayer = () => {
+  const { current: currentIdx, nextTrack } = useContext(AudioListContext);
+
   const [isPlaing, setIsPlaing] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
 
-  const current = useChillHop()[currentTrack];
+  const current = useChillHop()[currentIdx];
   const AudioRef = useRef(new Audio(current.audio));
-
 
   const intervalRef = useRef(null);
 
@@ -21,20 +23,25 @@ const AudioPlayer = ({ currentTrack }) => {
     setIsPlaing(!isPlaing);
   };
 
-  const play = () => {
-    console.log('play')
-    AudioRef.current.play();
+  const play = async () => {
+    console.log("play");
+    await AudioRef.current.play();
     intervalRef.current = setInterval(() => {
-        console.log('currentTime', currentTime,  intervalRef.current)
-        setCurrentTime((c) => c + 1 );
-      }, 1000)
+      setCurrentTime((c) => c + 1);
+    }, 1000);
   };
 
   const pause = () => {
-    console.log('pause')
+    console.log("pause");
     AudioRef.current.pause();
-    clearInterval(intervalRef.current)
+    clearInterval(intervalRef.current);
   };
+
+  const handleScrub = (value) => {
+
+    setCurrentTime(value);
+    AudioRef.current.currentTime = value;
+  }
 
   useEffect(() => {
     if (isPlaing) {
@@ -44,13 +51,32 @@ const AudioPlayer = ({ currentTrack }) => {
     }
   }, [isPlaing]);
 
+  useEffect(() => {
+    if (currentTime >= AudioRef.current.duration) {
+      nextTrack();
+    }
+  }, [currentTime, nextTrack]);
+
+  useEffect(() => {
+    console.log('eff current', current);
+    setCurrentTime(0);
+    if(isPlaing){
+      pause();
+    }
+    AudioRef.current = new Audio(current.audio);
+    if(isPlaing){
+      play();
+    }
+  }, [currentIdx]);
+
   return (
     <>
       <AudioController
         isPlaing={isPlaing}
-        onToglePlay={toggleHandler}
         duration={AudioRef.current.duration}
         currentTime={currentTime}
+        onScrub={handleScrub}
+        onToglePlay={toggleHandler}
       />
     </>
   );
