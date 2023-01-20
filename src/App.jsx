@@ -1,4 +1,4 @@
-import React from "react";
+import React, {lazy, Suspense} from "react";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -12,10 +12,19 @@ import {
 import { Formik, useFormik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { string } from "yup/lib/locale";
+import PhoneInput from "./components/PhoneInput/PhoneInput";
+import phoneSchema from "./components/PhoneInput/Schema";
+
+// import Home from "./components/Home";
+// import About from "./components/About"; // static
+
+const Home = lazy( () =>  import("./components/Home")) //lazy load'
+const About =  lazy(() =>  import("./components/About")) //lazy load 
+
 
 const RotersPath = {
   Home: "/home",
-  About: "/about/:id",
+  About: "/about",
   Registration: "/registration",
   Error: "/404",
 };
@@ -41,7 +50,7 @@ const Routes = [
 
 function App() {
   return (
-    <>
+    <Suspense fallback={<p>loading...</p>}>
       <Router>
         <nav>
           <Link to={"/home"}>Home</Link>
@@ -63,18 +72,18 @@ function App() {
           <Redirect to={RotersPath.Error} />
         </Switch>
       </Router>
-    </>
+    </Suspense>
   );
 }
 
 export default App;
 
 const registrationSchema = yup.object().shape({
-  firstName: yup.string().required(),
+  firstName: yup.string().matches(/^[A-Z][a-z A-Z]+/gm).required(),
   lastName: yup.string().required(),
   age: yup.number().positive().integer().max(100).required(),
   email: yup.string().email(),
-  phone: yup.string(),
+  phone: phoneSchema,
 });
 
 function RegistrationForm() {
@@ -92,7 +101,7 @@ function RegistrationForm() {
         validateOnBlur
         onSubmit={(e) => console.log("submit", e)}
       >
-        {({values, handleChange}) => (
+        {({values, handleChange,}) => (
           <Form>
     
             <Field name="firstName" />
@@ -108,7 +117,7 @@ function RegistrationForm() {
             <ErrorMessage name="age" />
             <Field name="email" />
             <ErrorMessage name="email" />
-            <Field name="phone" />
+            <PhoneInput name='phone' onChange={handleChange} value={values.phone} />
             <ErrorMessage name="phone" />
             <button type="submit">submit</button>
           </Form>
@@ -118,28 +127,8 @@ function RegistrationForm() {
   );
 }
 
-function Home() {
-  const location = useLocation();
-  console.log("location", location);
-  return (
-    <>
-      <p>Home</p>
-      <Link to="/home/testHome">testHome</Link>
-      <Route path={"/home/testHome"}>
-        {" "}
-        <p>test home second route</p>{" "}
-      </Route>
-    </>
-  );
-}
 
-function About() {
-  // const location = useLocation();
-  // const {id} = useParams();
-  // console.log('location', location, id);
 
-  return <p>About</p>;
-}
 
 function AboutMe() {
   const mat = useRouteMatch("/about/:id");
