@@ -38,7 +38,6 @@ const CounterSlice = createSlice({
          
       },
       extraReducers: (builder) => {
-        console.log('extraReducers', builder);
         // Add reducers for additional action types here, and handle loading state as needed
         builder.addCase(fetchUsersById.fulfilled, (state, action) => {
             console.log(action.payload)
@@ -48,8 +47,6 @@ const CounterSlice = createSlice({
       },
 });
 
-console.log('CounterSlice', CounterSlice);
-
 export const {increment, decrement, incrementByAmount } = CounterSlice.actions;
 
-export default CounterSlice.reducer
+export default CounterSlice.reducer;

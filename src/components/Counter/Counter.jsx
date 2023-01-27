@@ -1,11 +1,18 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {increment, decrement, fetchUsersById} from "./CounterSlice";
-
+import {increment, decrement} from "./CounterSlice";
+import { useGetUsersQuery, useLazyGetUsersByIdQuery, useDeleteUserByIdMutation, usePatchUserByIdMutation } from "./UsersApi";
   
 function Counter() {
     const value = useSelector((state) => state.number.value);
+    const useGetUsersQueryData = useGetUsersQuery();
+    // const [fetch, data] = useLazyGetUsersByIdQuery();
+    const [fetch, data] =  usePatchUserByIdMutation();
     const dispatch = useDispatch();
+    console.log(data);
+    const clickHandler = () => {
+        fetch({id: value, name: 'test puth'})
+    }
 
     return (
       <div>
@@ -16,9 +23,15 @@ function Counter() {
         <button onClick={() => dispatch(decrement())}>
             -
         </button>
-        <button onClick={() => dispatch(fetchUsersById({userId: value}))}>
+        <button onClick={clickHandler}>
             get Users
         </button>
+
+        <ul>
+            <button onClick={() => useGetUsersQueryData.refetch()}>refetch all</button>
+            {useGetUsersQueryData.isFetching && <li>loading...</li>}
+            {!useGetUsersQueryData.isFetching && useGetUsersQueryData.data.map(i => <li>{i.id} + {i.name}</li>)}
+        </ul>
         </div>
     );
   }
