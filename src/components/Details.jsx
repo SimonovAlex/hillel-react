@@ -1,5 +1,5 @@
 import {Component} from "react";
-import MyP from "./MyP";
+import MyP from "@components/MyP";
 
 class Details extends Component {
 
