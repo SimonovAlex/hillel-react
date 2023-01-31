@@ -3,19 +3,22 @@ import {useDispatch, useSelector} from "react-redux";
 import {increment, decrement} from "./CounterSlice";
 import { useGetUsersQuery, useLazyGetUsersByIdQuery, useDeleteUserByIdMutation, usePatchUserByIdMutation } from "./UsersApi";
   
+import Comp from '@app/components/Comp';
+
 function Counter() {
     const value = useSelector((state) => state.number.value);
     const useGetUsersQueryData = useGetUsersQuery();
     // const [fetch, data] = useLazyGetUsersByIdQuery();
     const [fetch, data] =  usePatchUserByIdMutation();
     const dispatch = useDispatch();
-    console.log(data);
+    // console.log(data);
     const clickHandler = () => {
         fetch({id: value, name: 'test puth'})
     }
 
     return (
       <div>
+        <Comp width={100} height={200} />
         <button onClick={() => dispatch(increment())}>
             +
         </button>

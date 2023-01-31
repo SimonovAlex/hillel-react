@@ -15,6 +15,8 @@ import { string } from "yup/lib/locale";
 import PhoneInput from "./components/PhoneInput/PhoneInput";
 import phoneSchema from "./components/PhoneInput/Schema";
 
+import Details from "@components/Details";
+
 // import Home from "./components/Home";
 // import About from "./components/About"; // static
 
@@ -135,7 +137,7 @@ function RegistrationForm() {
 
 function AboutMe() {
   const mat = useRouteMatch("/about/:id");
-  console.log("id about me ", mat);
+  // console.log("id about me ", mat);
 
   return <Link to={"/about/asdasd"}>About ME </Link>;
 }
